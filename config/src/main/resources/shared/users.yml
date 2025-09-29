@@ -1,0 +1,26 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: users
+  datasource:
+    url: jdbc:postgresql://localhost:5432/projectNest
+    username: postgres
+    password: egorik1234566
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  cloud:
+    compatibility-verifier:
+      enabled: false
+
+token:
+  signing:
+    key: tretjregfekgfgfdkgfekgeg43grggfdkwdfwdwoshogbksaofagkfalgkfdboebkgrohktelsks
+    lifetime: 3600000
