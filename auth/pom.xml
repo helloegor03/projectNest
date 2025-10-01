@@ -88,6 +88,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.helloegor03</groupId>
+			<artifactId>securityStarter</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

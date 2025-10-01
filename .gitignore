@@ -39,3 +39,4 @@ build/
 application.yml
 .env
 users.yml
+projects.yml

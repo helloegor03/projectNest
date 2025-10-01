@@ -1,6 +1,5 @@
 package com.helloegor03.auth.service;
 
-import com.helloegor03.auth.config.JwtUtil;
 import com.helloegor03.auth.dto.AuthRequest;
 import com.helloegor03.auth.dto.RegisterRequest;
 import com.helloegor03.auth.model.User;
@@ -11,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -53,6 +54,13 @@ public class AuthService {
             throw new RuntimeException("Cannot found this user");
         }
         userRepository.deleteById(id);
+    }
+
+    public Optional<User> findUserById(Long id){
+        if(!userRepository.existsById(id)){
+            throw new RuntimeException("User with this id not found");
+        }
+        return userRepository.findById(id);
     }
 
 

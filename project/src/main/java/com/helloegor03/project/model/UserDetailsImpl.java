@@ -1,24 +1,12 @@
-package com.helloegor03.auth.model;
+package com.helloegor03.project.model;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
-    private final User user;
-
-    public UserDetailsImpl(User user) {
-        this.user = user;
-    }
-
-    public Long getId(){
-        return user.getId();
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -40,17 +28,17 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return List.of();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
-    }
-
-    @Override
-    public String getPassword() {
-        return user.getPassword();
+        return "";
     }
 }
