@@ -8,6 +8,7 @@ services:
     ports:
       - "8888:8888"
 
+
   auth-service:
     build:
       context: ./auth
@@ -21,3 +22,21 @@ services:
       - config-server
     ports:
       - "8090:8090"
+
+
+  project-service:
+    build:
+      context: ./project
+    container_name: project-service
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+      SPRING_DATASOURCE_URL: ${POSTGRES_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      APPLICATION_CONFIG_USERS_URL: http://auth-service:8090
+    depends_on:
+      - config-server
+    ports:
+      - "8070:8070"
+
+

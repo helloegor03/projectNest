@@ -1,12 +1,11 @@
 package com.helloegor03.project.service;
 
-import com.helloegor03.project.config.CustomJwtUtil;
 import com.helloegor03.project.config.EmployeeClient;
+import com.helloegor03.project.config.JwtUtil;
 import com.helloegor03.project.dto.UserResponse;
 import com.helloegor03.project.model.Employee;
 import com.helloegor03.project.model.Project;
 import com.helloegor03.project.model.Role;
-import com.helloegor03.project.repository.EmployeeRepository;
 import com.helloegor03.project.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,19 +14,24 @@ import java.util.List;
 
 @Service
 public class ProjectService {
+
     private final ProjectRepository projectRepository;
     private final EmployeeClient employeeClient;
+    private final JwtUtil jwtUtil;
 
-    public ProjectService(ProjectRepository projectRepository, EmployeeClient employeeClient) {
+    public ProjectService(ProjectRepository projectRepository,
+                          EmployeeClient employeeClient,
+                          JwtUtil jwtUtil) {
         this.projectRepository = projectRepository;
         this.employeeClient = employeeClient;
+        this.jwtUtil = jwtUtil;
     }
 
-    public Project createProject(String projectName, String jwtToken, CustomJwtUtil jwtUtil) {
+    public Project createProject(String projectName, String jwtToken) {
         if (!jwtUtil.validateJwtToken(jwtToken)) {
             throw new RuntimeException("Invalid JWT token");
         }
-        Long userId = Long.parseLong(jwtUtil.getUserIdFromToken(jwtToken));
+        Long userId = jwtUtil.getUserIdFromToken(jwtToken);
 
         Project project = new Project();
         project.setName(projectName);
@@ -37,8 +41,7 @@ public class ProjectService {
         Employee chief = new Employee();
         chief.setUserId(userResponse.getId());
         chief.setUsername(userResponse.getUsername());
-        chief.setRole(Role.ROLE_CHIEF); //по стандарту пользователь который создаёт новый проект
-                                        //получает роль шефа
+        chief.setRole(Role.ROLE_CHIEF);
 
         project.setEmployees(new ArrayList<>());
         project.getEmployees().add(chief);
@@ -46,11 +49,11 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public Project addEmployeeToProject(Long projectId, Long userId, String jwtToken, CustomJwtUtil jwtUtil){
-        if (!jwtUtil.validateJwtToken(jwtToken)) {
+    public Project addEmployeeToProject(Long projectId, Long userId, String token) {
+        if (!jwtUtil.validateJwtToken(token)) {
             throw new RuntimeException("Invalid JWT token");
         }
-        Long chiefUserId = Long.parseLong(jwtUtil.getUserIdFromToken(jwtToken));
+        Long chiefUserId = jwtUtil.getUserIdFromToken(token);
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
@@ -71,5 +74,19 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    public List<Employee> getEmployeesByProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+        return project.getEmployees();
+    }
 
+    public Employee getEmployeeById(Long projectId, Long userId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        return project.getEmployees().stream()
+                .filter(emp -> emp.getUserId().equals(userId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Employee not found in this project"));
+    }
 }

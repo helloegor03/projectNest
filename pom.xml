@@ -12,7 +12,7 @@
     <module>config</module>
     <module>project</module>
     <module>securityStarter</module>
-      <module>securityStarter</module>
+    <module>securityStarter</module>
   </modules>
   <dependencies>
     <dependency>

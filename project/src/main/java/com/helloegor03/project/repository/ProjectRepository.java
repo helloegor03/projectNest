@@ -9,4 +9,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findProjectById(Long id);
     Optional<Project> findOwnerById(Long ownerId);
 
+
 }
