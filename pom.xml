@@ -13,6 +13,7 @@
     <module>project</module>
     <module>securityStarter</module>
     <module>securityStarter</module>
+    <module>task</module>
   </modules>
   <dependencies>
     <dependency>
