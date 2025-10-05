@@ -14,6 +14,7 @@
     <module>securityStarter</module>
     <module>securityStarter</module>
     <module>task</module>
+      <module>common-lib</module>
   </modules>
   <dependencies>
     <dependency>

@@ -7,6 +7,7 @@ import com.helloegor03.project.model.Employee;
 import com.helloegor03.project.model.Project;
 import com.helloegor03.project.model.Role;
 import com.helloegor03.project.repository.ProjectRepository;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,13 +19,16 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final EmployeeClient employeeClient;
     private final JwtUtil jwtUtil;
+    private final KafkaTemplate<String, ProjectCreatedEvent> kafkaTemplate;
 
     public ProjectService(ProjectRepository projectRepository,
                           EmployeeClient employeeClient,
-                          JwtUtil jwtUtil) {
+                          JwtUtil jwtUtil,
+                          KafkaTemplate<String, ProjectCreatedEvent> kafkaTemplate) {
         this.projectRepository = projectRepository;
         this.employeeClient = employeeClient;
         this.jwtUtil = jwtUtil;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public Project createProject(String projectName, String jwtToken) {
@@ -46,7 +50,15 @@ public class ProjectService {
         project.setEmployees(new ArrayList<>());
         project.getEmployees().add(chief);
 
-        return projectRepository.save(project);
+        Project saved = projectRepository.save(project);
+        ProjectCreatedEvent event = new ProjectCreatedEvent(
+                saved.getId(),
+                saved.getEmployees(),
+                saved.getName()
+        );
+        kafkaTemplate.send("project-created-topic", event);
+
+        return saved;
     }
 
     public Project addEmployeeToProject(Long projectId, Long userId, String token) {
@@ -71,7 +83,11 @@ public class ProjectService {
 
         project.getEmployees().add(newEmployee);
 
-        return projectRepository.save(project);
+        Project saved = projectRepository.save(project);
+
+        ProjectCreatedEvent event = new ProjectCreatedEvent(saved.getId(), saved.getEmployees(), saved.getName());
+
+        return saved;
     }
 
     public List<Employee> getEmployeesByProject(Long projectId) {
