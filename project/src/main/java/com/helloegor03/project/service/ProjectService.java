@@ -9,9 +9,12 @@ import com.helloegor03.project.model.Role;
 import com.helloegor03.project.repository.ProjectRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import com.helloegor03.common.dto.ProjectCreatedEvent;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -40,6 +43,8 @@ public class ProjectService {
         Project project = new Project();
         project.setName(projectName);
         project.setOwnerId(userId);
+
+        // Получаем данные о создателе (chief)
         UserResponse userResponse = employeeClient.findUserById(userId);
 
         Employee chief = new Employee();
@@ -51,10 +56,14 @@ public class ProjectService {
         project.getEmployees().add(chief);
 
         Project saved = projectRepository.save(project);
+
+        // Конвертация в common.dto.Employee
+        List<com.helloegor03.common.dto.Employee> commonEmployees = convertToCommonEmployees(saved.getEmployees());
+
         ProjectCreatedEvent event = new ProjectCreatedEvent(
                 saved.getId(),
-                saved.getEmployees(),
-                saved.getName()
+                saved.getName(),
+                commonEmployees
         );
         kafkaTemplate.send("project-created-topic", event);
 
@@ -85,7 +94,15 @@ public class ProjectService {
 
         Project saved = projectRepository.save(project);
 
-        ProjectCreatedEvent event = new ProjectCreatedEvent(saved.getId(), saved.getEmployees(), saved.getName());
+        // Конвертация
+        List<com.helloegor03.common.dto.Employee> commonEmployees = convertToCommonEmployees(saved.getEmployees());
+
+        ProjectCreatedEvent event = new ProjectCreatedEvent(
+                saved.getId(),
+                saved.getName(),
+                commonEmployees
+        );
+        kafkaTemplate.send("project-created-topic", event);
 
         return saved;
     }
@@ -104,5 +121,16 @@ public class ProjectService {
                 .filter(emp -> emp.getUserId().equals(userId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Employee not found in this project"));
+    }
+
+    // 🔥 Конвертер для project.model.Employee → common.dto.Employee
+    private List<com.helloegor03.common.dto.Employee> convertToCommonEmployees(List<Employee> employees) {
+        return employees.stream()
+                .map(e -> new com.helloegor03.common.dto.Employee(
+                        e.getUserId(),
+                        e.getUsername(),
+                        e.getRole().name()
+                ))
+                .collect(Collectors.toList());
     }
 }

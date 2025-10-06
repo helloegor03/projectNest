@@ -17,7 +17,6 @@ public class ProjectCreatedListener {
 
     @KafkaListener(
             topics = "project-created-topic",
-            groupId = "task-service",
             containerFactory = "projectCreatedKafkaListenerContainerFactory"
     )
     public void consume(ProjectCreatedEvent event) {

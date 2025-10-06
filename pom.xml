@@ -12,9 +12,9 @@
     <module>config</module>
     <module>project</module>
     <module>securityStarter</module>
-    <module>securityStarter</module>
+    <module>common-lib</module>
     <module>task</module>
-      <module>common-lib</module>
+
   </modules>
   <dependencies>
     <dependency>
