@@ -1,5 +1,7 @@
 package com.helloegor03.project.controller;
 
+import com.helloegor03.project.dto.AddEmployeeRequest;
+import com.helloegor03.project.dto.CreateProjectRequest;
 import com.helloegor03.project.model.Employee;
 import com.helloegor03.project.model.Project;
 import com.helloegor03.project.service.ProjectService;
@@ -17,19 +19,18 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping
-    public Project createProject(@RequestParam String name,
+    @PostMapping("create")
+    public Project createProject(@RequestBody CreateProjectRequest request,
                                  @RequestHeader("Authorization") String token) {
         String jwtToken = token.replace("Bearer ", "");
-        return projectService.createProject(name, jwtToken);
+        return projectService.createProject(request.getName(), jwtToken);
     }
 
-    @PostMapping("/{projectId}/employees/{userId}")
-    public Project addEmployee(@PathVariable Long projectId,
-                               @PathVariable Long userId,
+    @PostMapping("add/employee")
+    public Project addEmployee(@RequestBody AddEmployeeRequest request,
                                @RequestHeader("Authorization") String token) {
         String jwtToken = token.replace("Bearer ", "");
-        return projectService.addEmployeeToProject(projectId, userId, jwtToken);
+        return projectService.addEmployeeToProject(request.getProjectId(), request.getUserId(), jwtToken);
     }
 
     @GetMapping("/{projectId}/employees")
