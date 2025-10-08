@@ -12,6 +12,7 @@ public class Project {
     private Long id;
     private String name; //name of project
     private Long ownerId;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
     private List<Employee> employees;

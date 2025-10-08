@@ -1,5 +1,6 @@
 package com.helloegor03.task.config;
 
+import com.helloegor03.common.dto.EmployeeCreatedEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,26 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, ProjectCreatedEvent> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(projectCreatedConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, EmployeeCreatedEvent> employeeAddedConsumerFactory() {
+        JsonDeserializer<EmployeeCreatedEvent> deserializer = new JsonDeserializer<>(EmployeeCreatedEvent.class);
+        deserializer.addTrustedPackages("*");
+
+        Map<String, Object> config = new HashMap<>();
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "task-service");
+
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, EmployeeCreatedEvent> employeeAddedKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, EmployeeCreatedEvent> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(employeeAddedConsumerFactory());
         return factory;
     }
 }

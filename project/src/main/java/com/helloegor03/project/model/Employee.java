@@ -8,10 +8,16 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long userId;
     private String username;
 
+    @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_EMPLOYEE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     public Long getId() {
         return id;
@@ -19,6 +25,14 @@ public class Employee {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -37,11 +51,11 @@ public class Employee {
         this.role = role;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 }
