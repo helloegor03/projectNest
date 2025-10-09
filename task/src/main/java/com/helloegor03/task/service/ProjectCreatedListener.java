@@ -2,6 +2,7 @@ package com.helloegor03.task.service;
 
 import com.helloegor03.common.dto.ProjectCreatedEvent;
 import com.helloegor03.task.model.Assignee;
+import com.helloegor03.task.model.Role;
 import com.helloegor03.task.repository.AssigneeRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class ProjectCreatedListener {
             assignee.setProjectId(event.getProjectId());
             assignee.setUserIdForEmployee(e.getUserId());
             assignee.setUsername(e.getUsername());
+            assignee.setRole(Role.valueOf(event.getRole().name()));
             assigneeRepository.save(assignee);
         });
     }

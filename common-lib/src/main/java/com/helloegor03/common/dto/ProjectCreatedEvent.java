@@ -6,13 +6,15 @@ public class ProjectCreatedEvent {
     private Long projectId;
     private String name;
     private List<Employee> employees;
+    Role role = Role.ROLE_CHIEF;
 
     public ProjectCreatedEvent() {}
 
-    public ProjectCreatedEvent(Long projectId, String name, List<Employee> employees) {
+    public ProjectCreatedEvent(Long projectId, String name, List<Employee> employees, Role role) {
         this.projectId = projectId;
         this.name = name;
         this.employees = employees;
+        this.role = role;
     }
 
     public Long getProjectId() {
@@ -37,5 +39,13 @@ public class ProjectCreatedEvent {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

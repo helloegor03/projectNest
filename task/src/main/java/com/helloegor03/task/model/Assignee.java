@@ -11,6 +11,16 @@ public class Assignee {
     private Long projectId;
     private Long userIdForEmployee;
     private String username;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public Long getId() {
         return id;
@@ -43,4 +53,6 @@ public class Assignee {
     public void setUsername(String username) {
         this.username = username;
     }
+
+
 }

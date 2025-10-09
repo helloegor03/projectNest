@@ -1,5 +1,6 @@
 package com.helloegor03.project.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Project {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private List<Employee> employees;
 
     public Long getId() {

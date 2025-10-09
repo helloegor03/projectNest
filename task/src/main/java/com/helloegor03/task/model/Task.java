@@ -2,6 +2,8 @@ package com.helloegor03.task.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "tasks")
 public class Task {
@@ -12,13 +14,23 @@ public class Task {
     private String name;
     private boolean isCompleted;
     private Long assigneeId;
+    private LocalDate date;
 
-    public Task(Long id, Long projectId, String name, boolean isCompleted, Long assigneeId) {
+    public Task(Long id, Long projectId, Long assigneeId, String name, boolean isCompleted, LocalDate date) {
         this.id = id;
         this.projectId = projectId;
+        this.assigneeId = assigneeId;
         this.name = name;
         this.isCompleted = isCompleted;
-        this.assigneeId = assigneeId;
+        this.date = date;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Long getId() {

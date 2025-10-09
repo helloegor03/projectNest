@@ -70,7 +70,8 @@ public class ProjectService {
         ProjectCreatedEvent event = new ProjectCreatedEvent(
                 saved.getId(),
                 saved.getName(),
-                commonEmployees
+                commonEmployees,
+                com.helloegor03.common.dto.Role.ROLE_CHIEF
         );
         kafkaTemplate.send("project-created-topic", event);
 
@@ -114,7 +115,8 @@ public class ProjectService {
 
         EmployeeCreatedEvent employeeEvent = new EmployeeCreatedEvent(
                 project.getId(),
-                employeeDto
+                employeeDto,
+                com.helloegor03.common.dto.Role.ROLE_EMPLOYEE
         );
         employeeCreatedEventKafkaTemplate.send("employee-added-topic", employeeEvent);
 
