@@ -1,15 +1,15 @@
-package com.helloegor03.project.config;
+package com.helloegor03.common.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Component
 public class JwtUtil {
-
     @Value("${token.signing.key}")
     private String secret;
 

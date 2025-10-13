@@ -1,8 +1,7 @@
 package com.helloegor03.project.service;
-
+import com.helloegor03.common.security.JwtUtil;
 import com.helloegor03.common.dto.EmployeeCreatedEvent;
 import com.helloegor03.project.config.EmployeeClient;
-import com.helloegor03.project.config.JwtUtil;
 import com.helloegor03.project.dto.UserResponse;
 import com.helloegor03.project.model.Employee;
 import com.helloegor03.project.model.Project;

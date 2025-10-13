@@ -1,5 +1,4 @@
-package com.helloegor03.project.model;
-
+package com.helloegor03.common.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,13 +27,13 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return "";
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+    public String getPassword() {
+        return "";
     }
 
     @Override

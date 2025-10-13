@@ -1,6 +1,5 @@
-package com.helloegor03.project.config;
+package com.helloegor03.common.security;
 
-import com.helloegor03.project.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +13,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
 @Component
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
-    public JwtAuthTokenFilter(UserDetailsServiceImpl userDetailsService, JwtUtil jwtUtil) {
+    public JwtAuthTokenFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
     }

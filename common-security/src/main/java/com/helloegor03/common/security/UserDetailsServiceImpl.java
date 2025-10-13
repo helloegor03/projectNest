@@ -1,5 +1,4 @@
-package com.helloegor03.project.service;
-
+package com.helloegor03.common.security;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

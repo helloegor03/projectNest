@@ -1,4 +1,4 @@
-package com.helloegor03.task.config;
+package com.helloegor03.common.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,6 +1,6 @@
 package com.helloegor03.task.service;
 
-import com.helloegor03.task.config.JwtUtil;
+import com.helloegor03.common.security.JwtUtil;
 import com.helloegor03.task.model.Role;
 import com.helloegor03.task.model.Task;
 import com.helloegor03.task.repository.AssigneeRepository;
