@@ -3,56 +3,50 @@ package com.helloegor03.task.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Date;
 
-
+@Component
 public class JwtUtil {
 
-    private final Key key;
-    private final long lifetime;
-
-    public JwtUtil(
-            @Value("${token.signing.key}") String secret,
-            @Value("${token.signing.lifetime}") long lifetime
-    ) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.lifetime = lifetime;
-    }
-
-    public String generateToken(Authentication authentication, String userId) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .claim("userId", userId)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + lifetime))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
+    @Value("${token.signing.key}")
+    private String secret;
 
     public String getUsernameFromToken(String token) {
-        return parseClaims(token).getSubject();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (JwtException e) {
+            System.out.println("JWT parsing error: " + e.getMessage());
+            return null;
+        }
     }
-
-
-    public String getUserIdFromToken(String token) {
-        return parseClaims(token).get("userId", String.class);
+    public Long getUserIdFromToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.get("userId", Long.class);
+        } catch (JwtException e) {
+            System.out.println("JWT parsing error: " + e.getMessage());
+            return null;
+        }
     }
-
 
     public boolean validateJwtToken(String token) {
         try {
-            parseClaims(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             System.out.println("JWT validation error: " + e.getMessage());
@@ -60,12 +54,4 @@ public class JwtUtil {
         return false;
     }
 
-
-    private Claims parseClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
 }

@@ -23,7 +23,7 @@ public class EmployeeAddedListener {
     public void consume(EmployeeCreatedEvent event) {
         Assignee assignee = new Assignee();
         assignee.setProjectId(event.getProjectId());
-        assignee.setUserIdForEmployee(event.getEmployee().getUserId());
+        assignee.setUserId(event.getEmployee().getUserId());
         assignee.setUsername(event.getEmployee().getUsername());
         assignee.setRole(Role.valueOf(event.getRole().name()));
         assigneeRepository.save(assignee);

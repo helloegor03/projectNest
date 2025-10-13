@@ -24,7 +24,7 @@ public class ProjectCreatedListener {
         event.getEmployees().forEach(e -> {
             Assignee assignee = new Assignee();
             assignee.setProjectId(event.getProjectId());
-            assignee.setUserIdForEmployee(e.getUserId());
+            assignee.setUserId(e.getUserId());
             assignee.setUsername(e.getUsername());
             assignee.setRole(Role.valueOf(event.getRole().name()));
             assigneeRepository.save(assignee);

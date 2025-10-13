@@ -9,7 +9,7 @@ public class Assignee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long projectId;
-    private Long userIdForEmployee;
+    private Long userId;
     private String username;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -30,12 +30,12 @@ public class Assignee {
         this.id = id;
     }
 
-    public Long getUserIdForEmployee() {
-        return userIdForEmployee;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserIdForEmployee(Long userIdForEmployee) {
-        this.userIdForEmployee = userIdForEmployee;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getProjectId() {

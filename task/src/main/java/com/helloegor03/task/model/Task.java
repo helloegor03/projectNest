@@ -13,17 +13,8 @@ public class Task {
     private Long projectId;
     private String name;
     private boolean isCompleted;
-    private Long assigneeId;
+    private Long userId;
     private LocalDate date;
-
-    public Task(Long id, Long projectId, Long assigneeId, String name, boolean isCompleted, LocalDate date) {
-        this.id = id;
-        this.projectId = projectId;
-        this.assigneeId = assigneeId;
-        this.name = name;
-        this.isCompleted = isCompleted;
-        this.date = date;
-    }
 
     public LocalDate getDate() {
         return date;
@@ -65,11 +56,11 @@ public class Task {
         isCompleted = completed;
     }
 
-    public Long getAssigneeId() {
-        return assigneeId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setAssigneeId(Long assigneeId) {
-        this.assigneeId = assigneeId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

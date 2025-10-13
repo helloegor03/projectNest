@@ -40,7 +40,6 @@ public class JwtUtil {
         }
     }
 
-    // Проверка валидности токена
     public boolean validateJwtToken(String token) {
         try {
             Jwts.parserBuilder()
