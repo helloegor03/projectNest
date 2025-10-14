@@ -23,14 +23,12 @@ services:
     ports:
       - "9092:9092"
 
-
   config-server:
     build:
       context: ./config
     container_name: config-server
     ports:
       - "8888:8888"
-
 
   auth-service:
     build:
@@ -45,7 +43,6 @@ services:
       - config-server
     ports:
       - "8090:8090"
-
 
   project-service:
     build:
@@ -77,4 +74,16 @@ services:
     ports:
       - "8050:8050"
 
-
+  gateway:
+    build:
+      context: ./gateway
+    container_name: gateway
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+    depends_on:
+      - config-server
+      - auth-service
+      - project-service
+      - task-service
+    ports:
+      - "8222:8222"

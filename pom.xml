@@ -15,6 +15,7 @@
     <module>common-lib</module>
     <module>task</module>
     <module>common-security</module>
+    <module>gateway</module>
   </modules>
   <dependencies>
     <dependency>
