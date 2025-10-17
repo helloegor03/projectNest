@@ -5,16 +5,15 @@ ProjectNest — это микросервисное приложение для 
 
 ## 🛠️ Технологии
 
--Java 17
--Spring Boot 
--Spring Cloud 
--Spring Cloud Gateway
--Spring Cloud Config
--Spring Data JPA / Hibernate
--Spring Security + JWT
--Kafka / Zookeeper
--PostgreSQL
--Docker
+- ☕ **Java 17**
+- 🚀 **Spring Boot 3.5.5**
+- 🚀 **Spring Cloud**
+- 🗄️ **Spring Data JPA / Hibernate**
+- 🔐 **Spring Security + JWT**
+- 📡 **Spring Kafka**
+- 🐘 **PostgreSQL**
+- 🐳 **Docker + Docker Compose**
+- 📨 **Kafka** 
 
 ## 🐳 Как запустить проект
 
