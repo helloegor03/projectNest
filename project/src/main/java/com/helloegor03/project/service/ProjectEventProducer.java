@@ -16,4 +16,5 @@ public class ProjectEventProducer {
     public void sendProjectCreatedEvent(ProjectCreatedEvent event) {
         kafkaTemplate.send("project-created-topic", event);
     }
+
 }

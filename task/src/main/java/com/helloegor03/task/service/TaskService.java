@@ -1,5 +1,9 @@
 package com.helloegor03.task.service;
 
+import com.helloegor03.common.exceptions.task.CreatorException;
+import com.helloegor03.common.exceptions.task.EmployeeException;
+import com.helloegor03.common.exceptions.task.ProjectNotFoundException;
+import com.helloegor03.common.exceptions.task.TokenIsNotValidException;
 import com.helloegor03.common.security.JwtUtil;
 import com.helloegor03.task.model.Role;
 import com.helloegor03.task.model.Task;
@@ -25,22 +29,22 @@ public class TaskService {
 
     public Task createTask(String token, Long projectId, Long userId, String name){
         if(!jwtUtil.validateJwtToken(token)){
-            throw new RuntimeException("Your token is not valid");
+            throw new TokenIsNotValidException("Your token is not valid");
         }
         Long chiefUserId = jwtUtil.getUserIdFromToken(token);
 
         if (!assigneeRepository.existsByProjectId(projectId)) {
-            throw new RuntimeException("Project not found");
+            throw new ProjectNotFoundException("Project not found");
         }
 
         boolean isChief = assigneeRepository.existsByProjectIdAndUserIdAndRole(projectId, chiefUserId, Role.ROLE_CHIEF);
         if (!isChief) {
-            throw new RuntimeException("You are not the chief of this project");
+            throw new CreatorException("You are not the chief of this project");
         }
 
         boolean assigneeExists = assigneeRepository.findByProjectIdAndUserId(projectId, userId).isPresent();
         if (!assigneeExists) {
-            throw new RuntimeException("Assignee is not part of this project");
+            throw new EmployeeException("Assignee is not part of this project");
         }
 
         Task task = new Task();
@@ -55,7 +59,7 @@ public class TaskService {
 
     public void deleteTask(String token, Long projectId){
         if(!jwtUtil.validateJwtToken(token)){
-            throw new RuntimeException("Token is not valid");
+            throw new TokenIsNotValidException("Token is not valid");
         }
 
         if(!taskRepository.findById(projectId).isPresent()){

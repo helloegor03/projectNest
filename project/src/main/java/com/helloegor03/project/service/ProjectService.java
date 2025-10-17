@@ -1,4 +1,9 @@
 package com.helloegor03.project.service;
+import com.helloegor03.common.exceptions.auth.UserNotFoundException;
+import com.helloegor03.common.exceptions.task.CreatorException;
+import com.helloegor03.common.exceptions.task.EmployeeException;
+import com.helloegor03.common.exceptions.task.ProjectNotFoundException;
+import com.helloegor03.common.exceptions.task.TokenIsNotValidException;
 import com.helloegor03.common.security.JwtUtil;
 import com.helloegor03.common.dto.EmployeeCreatedEvent;
 import com.helloegor03.project.config.EmployeeClient;
@@ -43,7 +48,7 @@ public class ProjectService {
 
     public Project createProject(String projectName, String jwtToken) {
         if (!jwtUtil.validateJwtToken(jwtToken)) {
-            throw new RuntimeException("Invalid JWT token");
+            throw new TokenIsNotValidException("Invalid JWT token");
         }
         Long userId = jwtUtil.getUserIdFromToken(jwtToken);
 
@@ -79,19 +84,19 @@ public class ProjectService {
 
     public Project addEmployeeToProject(Long projectId, Long userId, String token) {
         if (!jwtUtil.validateJwtToken(token)) {
-            throw new RuntimeException("Invalid JWT token");
+            throw new TokenIsNotValidException("Invalid JWT token");
         }
         Long chiefUserId = jwtUtil.getUserIdFromToken(token);
 
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 
         if (!project.getOwnerId().equals(chiefUserId)) {
-            throw new RuntimeException("This is not your project");
+            throw new CreatorException("This is not your project");
         }
 
         if (employeeRepository.findByProjectIdAndUserId(projectId, userId).isPresent()) {
-            throw new RuntimeException("User already works on this project");
+            throw new EmployeeException("User already works on this project");
         }
 
         UserResponse userResponse = employeeClient.findUserById(userId);
@@ -124,18 +129,18 @@ public class ProjectService {
 
     public List<Employee> getEmployeesByProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
         return project.getEmployees();
     }
 
     public Employee getEmployeeById(Long projectId, Long userId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 
         return project.getEmployees().stream()
                 .filter(emp -> emp.getUserId().equals(userId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Employee not found in this project"));
+                .orElseThrow(() -> new UserNotFoundException("Employee not found in this project"));
     }
 
     // Конвертер для Employee в common.dto.Employee
