@@ -57,5 +57,4 @@ Config Server:       http://localhost:8888
 
 - Дописать notification
 - Реализовать статистику по задачам и проектам
-- Подключить мониторинг через Prometheus + Grafana
 - Добавить фронт
