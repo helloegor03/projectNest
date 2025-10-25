@@ -1,0 +1,34 @@
+server:
+  port: 8030
+
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: ${yourgmail}
+    password: ${yourpass}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl.trust: smtp.gmail.com
+
+
+token:
+  signing:
+    key: ${JWT_SECRET_KEY}
+    lifetime: 3600000

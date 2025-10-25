@@ -74,6 +74,21 @@ services:
     ports:
       - "8050:8050"
 
+  notification-service:
+    build:
+      context: ./notification
+    container_name: notification-service
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+      SPRING_DATASOURCE_URL: ${POSTGRES_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      APPLICATION_CONFIG_USERS_URL: http://auth-service:8090
+    depends_on:
+      - config-server
+    ports:
+      - "8030:8030"
+
   gateway:
     build:
       context: ./gateway

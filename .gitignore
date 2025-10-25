@@ -40,3 +40,4 @@ application.yml
 .env
 users.yml
 projects.yml
+notification.yml
