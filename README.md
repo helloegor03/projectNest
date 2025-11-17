@@ -1,9 +1,9 @@
-# ProjectNest — система управления проектами и задачами
+# ProjectNest — Project and Task Management System
 
-ProjectNest — это микросервисное приложение для управления проектами, задачами и уведомлениями.
-Система построена на Spring Boot и использует Spring Cloud для взаимодействия между сервисами, а также Kafka для обмена событиями.
+ProjectNest is a microservices application for managing projects, tasks, and notifications.
+The system is built on Spring Boot and uses Spring Cloud for service communication, as well as Kafka for event streaming.
 
-## 🛠️ Технологии
+## 🛠️ Technologies
 
 - ☕ **Java 17**
 - 🚀 **Spring Boot 3.5.5**
@@ -15,19 +15,19 @@ ProjectNest — это микросервисное приложение для 
 - 🐳 **Docker + Docker Compose**
 - 📨 **Kafka** 
 
-## 🐳 Как запустить проект
+## 🐳 How to Run the Project
 
-1. Клонировать репозиторий:
+1. Clone the repository:
 ```yaml
 git clone https://github.com/helloegor03/ProjectNest.git
 cd ProjectNest
 ```
-2. Изменить yml файлы на свои настройки базы данных:
+2. Update the YAML configuration files with your database settings.
 
-3. Запустить все контейнеры:
+3. Start all containers:
 docker compose up --build
 
-4. После успешного запуска сервисы будут доступны по адресам:
+4. After successful startup, the services will be available at:
 ```yaml
 Gateway:             http://localhost:8222
 Auth Service:        http://localhost:8090
@@ -37,24 +37,24 @@ Notification Service:http://localhost:8060
 Config Server:       http://localhost:8888
 ```
 
-## 🔐 Безопасность
+## 🔐 Security
 
-- Аутентификация реализована через JWT.
-- Пользователь получает токен через /auth/login, после чего передаёт его в заголовке Authorization: Bearer <token> при обращении к другим сервисам.
+- Authentication is implemented using JWT.
+- Users receive a token via /auth/login, which should be included in the Authorization: Bearer <token> header when accessing other services.
 
-## 📡 Взаимодействие между сервисами
+## 📡 Inter-Service Communication
 
-- **Gateway маршрутизирует все запросы по префиксам.**
+- **Gateway routes all requests based on prefixes.**
   
-- **Auth-Service проверяет JWT и управляет пользователями.**
+- **Auth Service validates JWT and manages users.**
   
-- **Project-Service и Task-Service публикуют события в Kafka, когда создаются, обновляются или удаляются сущности.**
+- **Project Service and Task Service publish events to Kafka when entities are created, updated, or deleted.**
   
-- **Notification-Service подписывается на Kafka-топики и рассылает уведомления (Gmail API).**
+- **Notification Service subscribes to Kafka topics and sends notifications (Gmail API).**
 
 
 ## TODO:
 
-- Дописать notification
-- Реализовать статистику по задачам и проектам
-- Добавить фронт
+- Complete the notification system
+- Implement statistics for tasks and projects
+- Add frontend
